@@ -2,8 +2,12 @@
 #define TRANSITION_HPP
 
 #include <ctype.h>
+#include <unordered_map>
 
 using namespace std;
+
+std::unordered_map<string, int> myTokenMap;
+fillTokenMap();
 
 enum STATESYMBOLS {
   ERR = 102,
@@ -138,6 +142,50 @@ int getCol(char c) {
     }
     return BU;
   }
+}
+
+//Given a lexeme in string format, will return the number associated with the enumerated token_type.
+//does this by using an unordered hash map. 
+int enumIdentifierNumber(string lexeme){
+	std::unordered_map<string, int>::const_iterator got = myTokenMap.find(lexeme);
+	if(got != myTokenMap.end()){
+		return got->second;
+	}
+	else return 0;
+}
+
+void fillTokenMap(){
+	myTokenMap.insert( 
+			{"cons", 5},
+			{"if",6},
+			{"cond",7},
+			{"else",8},
+			{"display",9},
+			{"newline",10},
+			{"and", 11},
+			{"or",12},
+			{"not",13},
+			{"define",14},
+			{"number?",15},
+			{"list?",16},
+			{"zero?",17},
+			{"null?",18},
+			{"string?",19},
+			{"+",20},
+			{"-",21},
+			{"/",22},
+			{"*",23},
+			{"modulo",24},
+			{"round",25},
+			{"=",26},
+			{">",27},
+			{"<",28},
+			{">=",29},
+			{"<=",30},
+			{"(",31},
+			{")",32},
+			{"'",33});
+
 }
 
 #endif

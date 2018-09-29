@@ -9,14 +9,14 @@ using namespace std;
 enum token_type {
 	NONE = -1, 
 
-	NUMLIT_T,
 	IDENT_T,
+	NUMLIT_T,
 	STRLIT_T,
 	
 	// Key words
 	LISTOP_T,
-	IF_T,
 	CONS_T,
+	IF_T,
 	COND_T,
 	ELSE_T,
 	DISPLAY_T,
@@ -69,7 +69,7 @@ class LexicalAnalyzer
 		string GetTokenName (token_type t) const;
 		string GetLexeme () const;
 		void ReportError (const string & msg);
-		int getCol(char c);
+		token_type GetTokenType();
 	private:
 		ifstream input;
 		ofstream listingFile;
