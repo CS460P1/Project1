@@ -6,9 +6,8 @@
 
 using namespace std;
 
-static string token_names[] = {	
-		"EOF_T", 
-		"IDENT_T",
+static string token_names[] = {	"EOF_T", 
+	"IDENT_T",
 		"NUMLIT_T",
 		"STRLIT_T",
 		"LISTOP_T",
@@ -46,7 +45,6 @@ static string token_names[] = {
 
 LexicalAnalyzer::LexicalAnalyzer (char * filename)
 {
-	// This function will initialize the lexical analyzer class
 	input.open(filename);
 	listingFile("P1-0.lst", ofstream::out);
 	tokenFile("P1-0.p1", ofstream::out);
@@ -60,15 +58,16 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 
 	token = GetToken();
 
+	// This function will initialize the lexical analyzer class
 }
 
 LexicalAnalyzer::~LexicalAnalyzer ()
 {
-	// This function will complete the execution of the lexical analyzer class
 	input.close();
 	listingFile.close();
 	tokenFile.close();
 	debugFile.close();
+	// This function will complete the execution of the lexical analyzer class
 }
 
 token_type LexicalAnalyzer::GetToken ()
@@ -150,6 +149,29 @@ token_type LexicalAnalyzer::GetToken ()
 	token = GetTokenType(prevState);
 	tokenFile << GetTokenName(token) << "   " << lexeme << endl;
 	return token;
+
+	//if we never find a token at this point that means we read the entire line and didnt find anything,
+	//so that's an error
+
+	/*This splits a string up where there is spaces. can be deleted if not useful
+
+	  string word;
+	  istringstream iss(line);
+	  while(iss >> word);
+	  */
+
+
+	/*
+	   once we find a token, call find GetLexeme, 
+	   and print in token file the token followed by the corresponding lexeme.
+
+	   create a hash with <int, string> structure so we can print to the token file in string.
+	   this should be done in a global scope outside of the function 
+	   e.g: 
+	   std::unordered_map<std::string,double> mymap = {
+	   {0,"CONS_T"};
+
+*/
 }
 
 string LexicalAnalyzer::GetTokenName (token_type t) const
@@ -193,4 +215,18 @@ token_type LexicalAnalyzer::GetTokenType(int acceptingState){
 	}
 	//else we found a token in our hash table. 
 	else return token;	
+	
+	
+	
+	}
+	if(state == 6){
+		return CheckKeywork();
+	}
+
+	if(lexeme != ""){
+
+
+	}
+}
+
 }
