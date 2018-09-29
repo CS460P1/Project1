@@ -69,6 +69,7 @@ class LexicalAnalyzer
 		string GetTokenName (token_type t) const;
 		string GetLexeme () const;
 		void ReportError (const string & msg);
+		int getCol(char c);
 	private:
 		ifstream input;
 		ofstream listingFile;
