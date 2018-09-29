@@ -75,8 +75,7 @@ token_type LexicalAnalyzer::GetToken ()
 	if ( got != mymap.end() )
     		tokenFile << got->second;
 
-	lexeme = getLexeme(token);
-	tokenFile << lexeme << endl;
+	tokenFile << getLexeme() << endl;
 	return token;
 }
 
