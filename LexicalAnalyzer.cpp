@@ -19,6 +19,7 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 	lexeme = "";
 	errors = 0;
 
+	token = GetToken();
 
 	// This function will initialize the lexical analyzer class
 }
