@@ -13,6 +13,12 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 	tokenFile("P1-0.p1", ofstream::out);
 	debugFile("P1-0.dbg", ofstream::out);  
 
+	line = "";
+	linenum = 0; 
+	pos = 0;
+	lexeme = "";
+	errors = 0;
+
 
 	// This function will initialize the lexical analyzer class
 }
