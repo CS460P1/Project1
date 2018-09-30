@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -69,7 +70,9 @@ class LexicalAnalyzer
 		string GetTokenName (token_type t) const;
 		string GetLexeme () const;
 		void ReportError (const string & msg);
-		token_type GetTokenType();
+		token_type GetTokenType(int acceptingState);
+		int enumIdentifierNumber();
+		void fillTokenMap();
 	private:
 		ifstream input;
 		ofstream listingFile;
@@ -81,6 +84,7 @@ class LexicalAnalyzer
 		int pos;
 		string lexeme;
 		int errors;
+		std::unordered_map<string, int> myTokenMap;
 };
 
 #endif

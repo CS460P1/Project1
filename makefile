@@ -14,7 +14,7 @@ SyntacticalAnalyzer.o : SyntacticalAnalyzer.cpp SyntacticalAnalyzer.h LexicalAna
 	g++ -g -c SyntacticalAnalyzer.cpp
 
 Transition.o: transition.hpp
-	g++ -g -c transition.hpp
+	g++ -std=c++11 -g -c transition.hpp
 
 clean : 
 	rm *.o P1.out *.gch
