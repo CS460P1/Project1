@@ -13,7 +13,40 @@ enum STATESYMBOLS {
   GD = 100
 };
 
+enum SYMBOLS {
+  alpha_not_list,
+  digit,
+  period,
+  c_char,
+  a_char,
+  d_char,
+  r_char,
+  under_score,
+  double_quote,
+  plus_operator,
+  minus_operator,
+  division_operator,
+  multiplication_operator,
+  assignment_operator,
+  greater_than,
+  less_than,
+  open_parentheses,
+  close_parentheses,
+  single_quote,
+  percent,
+  ampersand,
+  open_bracket,
+  close_bracket,
+  question,
+  exclamation,
+  colon,
+  comma,
+  pipe,
+  tilde,
+  carrot
+};
 
+/*
 enum SYMBOLS {
   alpha_not_list,
   digit,
@@ -46,6 +79,8 @@ enum SYMBOLS {
   tilde,
   carrot
 };
+*/
+
 
 //std::unordered_map<string, int> myTokenMap;
 //fillTokenMap();
@@ -136,6 +171,8 @@ int getCol(char c) {
     return tilde;
   case '^':
     return carrot;
+  case '$':
+    return ERR;
   default:
     if (isdigit(c)) {
       return digit;

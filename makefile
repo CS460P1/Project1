@@ -1,5 +1,5 @@
-P1.out : Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o Transition.o
-	g++ -g -o P1.out Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o Transition.o
+P1.out : Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o 
+	g++ -g -o P1.out Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o 
 
 Project1.o : Project1.cpp SetLimits.h SyntacticalAnalyzer.h
 	g++ -g -c Project1.cpp
@@ -7,21 +7,18 @@ Project1.o : Project1.cpp SetLimits.h SyntacticalAnalyzer.h
 SetLimits.o : SetLimits.cpp SetLimits.h
 	g++ -g -c SetLimits.cpp
 
-LexicalAnalyzer.o : LexicalAnalyzer.cpp LexicalAnalyzer.h
+LexicalAnalyzer.o : LexicalAnalyzer.cpp LexicalAnalyzer.h transition.hpp
 	g++ -g -c LexicalAnalyzer.cpp
 
 SyntacticalAnalyzer.o : SyntacticalAnalyzer.cpp SyntacticalAnalyzer.h LexicalAnalyzer.h
 	g++ -g -c SyntacticalAnalyzer.cpp
 
-Transition.o: transition.hpp
-	g++ -std=c++11 -g -c transition.hpp
-
 clean : 
-	rm *.o P1.out *.gch
+	rm *.o P1.out *.gch *.p1 *.lst
 
-all: Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o
+all: Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o Transition.o
 
-run: P1.out
+run: ./P1.out P1-0.ss
 
 submit : Project1.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp makefile README.txt
 	rm -rf yourlastnameP1
