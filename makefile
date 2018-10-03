@@ -16,9 +16,14 @@ SyntacticalAnalyzer.o : SyntacticalAnalyzer.cpp SyntacticalAnalyzer.h LexicalAna
 clean : 
 	rm *.o P1.out *.gch *.p1 *.lst
 
-all: Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o Transition.o
+all: Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o 
 
-run: ./P1.out P1-0.ss
+exec: P1.out
+
+run: 
+	./P1.out P1-0.ss
+
+p1: all exec run
 
 submit : Project1.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp makefile README.txt
 	rm -rf yourlastnameP1

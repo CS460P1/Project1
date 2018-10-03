@@ -97,7 +97,7 @@ token_type LexicalAnalyzer::GetToken ()
 	lexeme = "";
 	//debugFile << line << endl;
 
-	
+
 	if(line[pos] == ' '){
 		while(line[pos] == ' '){
 			pos +=1;
@@ -120,7 +120,7 @@ token_type LexicalAnalyzer::GetToken ()
 		//while(state != ERR || state != BU || state != GD){
 		while(state < 100){	
 			col = getCol(line[pos]);
-
+			//cout << "col: " << col << endl;
 			//if(col != ERR || col != BU || col != GD) {
 			if(col < 100){	
 				prevState = state;
@@ -128,13 +128,14 @@ token_type LexicalAnalyzer::GetToken ()
 			}
 
 			else{
+				prevState = state;
 				state = col;
 			}
 
 			if(state != BU){
 				lexeme += line[pos];
 			}
-
+			//cout << "state: " << state << endl;
 			pos++;
 		}
 
@@ -144,23 +145,27 @@ token_type LexicalAnalyzer::GetToken ()
 		if(state == ERR){
 			//uhoh
 			errors++;
-			tokenFile<< "this lexeme gave err state: " << lexeme << endl;
+			//tokenFile<< "this lexeme gave err state: " << lexeme << endl;
 			ReportError(lexeme);
 			return ERROR_T;
 		}
 
 		if(state == BU){
+			//prevState += 1;
+			//cout << "prevstate: " << prevState << endl;
 			pos--;
-			token = GetTokenType(state);
+			token = GetTokenType(prevState);
 			//tokenFile << "In state: " << state << " and pos: " << pos << endl;
 			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
-			
+
 			return token;
 		}
 
 		else if(state == GD){
+			//prevState += 1;
+			//cout << "prevstate: " << prevState << endl;
 			//valid lexeme, leave pos
-			token = GetTokenType(state);
+			token = GetTokenType(prevState);
 			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
 			return token;
 		}
@@ -200,22 +205,28 @@ token_type LexicalAnalyzer::GetToken ()
 		//if(token == -1){
 		//must be IDENT, NUMLIT, STRLIT, OR LISTOP, find which one based off the state number that returned a GD or BU
 		//cout << "Accpeting state: " << acceptingState << endl;
-		if(acceptingState == 10){
-			return LISTOP_T;
+		std::unordered_map<string, int>::const_iterator got = myTokenMap.find(lexeme);
+		if(got != myTokenMap.end()){
+			return (token_type)got->second;
 		}
-		else if(acceptingState == 11){
-			return STRLIT_T;
-		}
-		else if(acceptingState == 1){
-			return IDENT_T;
-		}
-		else if(acceptingState == 4){
-			return NUMLIT_T;
+		else{//not found so check acceptingstates
+			if(acceptingState == 10){
+				return LISTOP_T;
+			}
+			else if(acceptingState == 11){
+				return STRLIT_T;
+			}
+			else if(acceptingState == 1){
+				return IDENT_T;
+			}
+			else if(acceptingState ==2 || acceptingState == 4 || acceptingState ==3){
+				return NUMLIT_T;
+			}
 		}
 		//}
-		token = (token_type)enumIdentifierNumber();
+		//token = (token_type)enumIdentifierNumber();
 		//else we found a token in our hash table. 
-		return token;	
+		//return token;	
 	}
 	void LexicalAnalyzer::fillTokenMap(){
 		myTokenMap.insert({
@@ -261,6 +272,14 @@ token_type LexicalAnalyzer::GetToken ()
 		if(got != myTokenMap.end()){
 			return got->second;
 		}
+		else{//not found so check acceptingstates
+
+
+		}
 		//TODO: this is wrong, always returns an IDENT_T token. 
-		else return 0;
+
+
+
+
+		//else return 0;
 	}
