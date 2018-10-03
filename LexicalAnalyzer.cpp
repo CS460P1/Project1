@@ -98,11 +98,13 @@ token_type LexicalAnalyzer::GetToken ()
 	//debugFile << line << endl;
 
 
-	if(line[pos] == ' '){
-		while(line[pos] == ' '){
-			pos +=1;
-		}
-	}
+	/*
+	   if(line[pos] == ' '){
+	   while(line[pos] == ' '){
+	   pos +=1;
+	   }
+	   }
+	   */
 
 	//TODO- INCOMPLETE//
 	//find the next token
@@ -170,12 +172,20 @@ token_type LexicalAnalyzer::GetToken ()
 			return token;
 		}
 
+		else if(state == SPACE){
+			//pos++;
+			token = GetTokenType(prevState);
+			//tokenFile << "In state: " << state << " and pos: " << pos << endl;
+			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
+
+			return token;
 		}
 		//means we hit end of line, think 3.3, it never returns a GD, BU, or ERR state. still should be a valid lexeme though
 		//
 		//token = GetTokenType(prevState);
 		//tokenFile << GetTokenName(token) << "   " << lexeme << endl;
 		//return token;
+		}
 	}
 
 	string LexicalAnalyzer::GetTokenName (token_type t) const
