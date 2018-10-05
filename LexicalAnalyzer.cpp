@@ -98,13 +98,13 @@ token_type LexicalAnalyzer::GetToken ()
 	//debugFile << line << endl;
 
 
-	/*
+/*	
 	   if(line[pos] == ' '){
 	   while(line[pos] == ' '){
 	   pos +=1;
 	   }
 	   }
-	   */
+*/	   
 
 	//TODO- INCOMPLETE//
 	//find the next token
@@ -118,27 +118,60 @@ token_type LexicalAnalyzer::GetToken ()
 
 		state = 0;
 		lexeme = "";
-
+	/*	
+		while(getCol(line[pos]) == 31 && pos < line.length()){
+			pos++; // skip whitespace. 
+		}	
+*/
 		//while(state != ERR || state != BU || state != GD){
 		while(state < 100){	
 			col = getCol(line[pos]);
+	
+			/*
+			if(col == 31 && state != 11){
+				pos++;
+				state == GD;
+				break; 
+			}
+			*/
+
 			//cout << "col: " << col << endl;
 			//if(col != ERR || col != BU || col != GD) {
+			/*
+			if(col == 31 && state != 11){
+				pos++;	
+			}
+			*/
+
 			if(col < 100){	
 				prevState = state;
-				state = table[state][col];	
+				state = table[state][col];
+				//cout << "states assigned in col < 100 call" << endl;
+				//cout <<"col: " << col << endl;
 			}
 
 			else{
 				prevState = state;
 				state = col;
+				//cout << "states assigned in else call" << endl;
 			}
 
 			if(state != BU){
-				lexeme += line[pos];
+				
+				if(state == 11 && col == 31){
+					lexeme += line[pos];
+					//not adding space!
+				}
+				else if(col != 31){
+				       lexeme += line[pos];
+				}
+				
+				//lexeme += line[pos];
 			}
-			//cout << "state: " << state << endl;
+			//cout << "prev state: " << prevState << endl;
+			//cout << "Current state: " << state << endl;	
 			pos++;
+
 		}
 
 
@@ -171,7 +204,8 @@ token_type LexicalAnalyzer::GetToken ()
 			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
 			return token;
 		}
-
+		
+		// I think this is wrong, if we see a space there should not be a token, unless its in quotes!
 		else if(state == SPACE){
 			//pos++;
 			token = GetTokenType(prevState);
@@ -180,11 +214,7 @@ token_type LexicalAnalyzer::GetToken ()
 
 			return token;
 		}
-		//means we hit end of line, think 3.3, it never returns a GD, BU, or ERR state. still should be a valid lexeme though
-		//
-		//token = GetTokenType(prevState);
-		//tokenFile << GetTokenName(token) << "   " << lexeme << endl;
-		//return token;
+		
 		}
 	}
 
