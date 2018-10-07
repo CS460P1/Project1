@@ -16,7 +16,7 @@ using namespace std;
 
 /*
   Object: token_type
-  Description: the enumerated types allows for 
+  Description: The enumerated types below allow for lexemes to be interpreted as their corresponding token types. 
 */
 enum token_type {
 	NONE = -1, 
@@ -72,6 +72,10 @@ enum token_type {
 	NUM_TOKENS
 };
 
+/*
+  Object: LexicalAnalyzer
+  Description: This class interprets input read in from a source file (.ss) and produces a listing (.lst), token (.p1), and a debugging (.dgb) file.
+*/
 class LexicalAnalyzer 
 {
 	public:
@@ -82,11 +86,10 @@ class LexicalAnalyzer
 		string GetLexeme () const;
 		void ReportError (const string & msg);
 		token_type GetTokenType(int acceptingState);
-		//int enumIdentifierNumber();
+		void WriteErrors();
 		void fillTokenMap();
-		int getErrors();
 	private:
-		ifstream input;
+		ifstream input; 
 		ofstream listingFile;
 		ofstream tokenFile;
 		ofstream debugFile;
