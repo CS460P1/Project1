@@ -1,3 +1,5 @@
+final: all exec
+
 p1: all exec run
 
 P1.out : Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o 
