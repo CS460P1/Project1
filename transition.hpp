@@ -184,7 +184,7 @@ int getCol(char c) {
     } else if (isalpha(c) && c != 'c' && c!= 'a' && c != 'd' && c != 'r') { // will still work for IDENT_T, just treats {c,a,d,r} as a special case
       return alpha_not_list;
     }
-    return BU;
+    return ERR;
   }
 }
 
