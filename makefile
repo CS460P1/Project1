@@ -16,7 +16,7 @@ SyntacticalAnalyzer.o : SyntacticalAnalyzer.cpp SyntacticalAnalyzer.h LexicalAna
 	g++ -g -c SyntacticalAnalyzer.cpp
 
 clean : 
-	rm *.o P1.out *.gch *.p1 *.lst
+	rm *.o P1.out *.gch *.p1 *.lst *.dbg
 
 all: Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o 
 
