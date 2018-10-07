@@ -111,16 +111,18 @@ token_type LexicalAnalyzer::GetToken ()
 	while(pos < line.length()){
 		state = 0;
 		lexeme = "";
+		//if a comment is the first thing we find on a line, skip the line
 		if (line[pos] == ';') {
 			line = "";
 		}
 		while(state < 100 && pos < line.length()){	
+			//if a comment is found part way through a line, skip the rest of the line
 			if (line[pos] == ';') {
 				line = "";
 			}
 
 			col = getCol(line[pos]);
-
+			//if we have not hit a SPACE, ERR2, ERR, BU, or, GD state
 			if(col < 100){	
 				prevState = state;
 				state = table[state][col];
@@ -132,10 +134,13 @@ token_type LexicalAnalyzer::GetToken ()
 			}
 
 			if(state != BU && state != 0){
-
+				//this handles the case if we are in a string, we want to add the 
+				//closing quote to the lexeme
 				if(state == 11 && col == 31){
 					lexeme += line[pos];
 				}
+				//only add to the lexeme if line[pos] is not a quote, this is because we 
+				//are not in a string
 				else if(col != 31){
 					lexeme += line[pos];
 				}
@@ -145,15 +150,13 @@ token_type LexicalAnalyzer::GetToken ()
 
 		}
 
-
-		//TODO: set proper width using iomanip
-
 		if(state == ERR){
 			errors++;
 			ReportError(lexeme);
 			return ERROR_T;
 		}
-
+		
+		//an error with a backup
 		if(state == ERR2){
 			errors++;
 			pos--;
@@ -175,6 +178,8 @@ token_type LexicalAnalyzer::GetToken ()
 			return token;
 		}
 
+		//means we reached the end of a lexeme, and we want to get the token type from the previous state that got
+		//us to the SPACE state. 
 		else if(state == SPACE){
 			token = GetTokenType(prevState);
 			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
@@ -184,7 +189,8 @@ token_type LexicalAnalyzer::GetToken ()
 
 
 	}
-	//end of line
+	//at this point we have reached the end of the line but have not reached an ERR, ERR2, BU, GD, or SPACE state. 
+	//though we might still have a valid lexeme that needs its token found and written to the token file. 
 	token = GetTokenType(prevState);
 	if(token == ERROR_T){
 		errors++;
