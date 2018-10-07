@@ -1,3 +1,13 @@
+/*
+  File: LexicalAnalyzer.cpp
+  Authors: Brandon Williams, John Salman, Nick Ivanoff
+  Class: CS460 Fall 2018
+  Description: This is the implementation of the LexicalAnalyzer class, this class is designed
+               to tokenize scheme code from a source file and output files containing the lines
+	       of input and errors within those lines, debugging information, and the lexemes with
+	       their interpreted token type.
+*/
+
 #include <iomanip>
 #include <cstdlib>
 #include "LexicalAnalyzer.h"
@@ -6,6 +16,10 @@
 
 using namespace std;
 
+/*
+  Object: token_names[]
+  Description: This is an array that can be indexed to return the name of a token type.
+*/
 static string token_names[] = {	
 	"IDENT_T",
 	"NUMLIT_T",
@@ -43,6 +57,9 @@ static string token_names[] = {
 	"ERROR_T",
 	"EOF_T"};
 
+/*
+  Function: 
+ */
 LexicalAnalyzer::LexicalAnalyzer (char * filename)
 {
 	// This function will initialize the lexical analyzer class
