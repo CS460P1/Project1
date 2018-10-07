@@ -51,18 +51,14 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 	tokenFile.open("P1-0.p1");
 	debugFile.open("P1-0.dbg");
 
-	//listingFile("P1-0.lst", ofstream::out);
-	//tokenFile("P1-0.p1", ofstream::out);
-	//debugFile("P1-0.dbg", ofstream::out);  
-
 	line = "";
 	linenum = 0; 
 	pos = 0;
 	lexeme = "";
 	errors = 0;
 
-	//token = GetToken();
 	fillTokenMap();
+	listingFile << "Input File: " << filename << endl;
 
 }
 
@@ -81,10 +77,8 @@ token_type LexicalAnalyzer::GetToken ()
 	// the token_type value associated with that lexeme
 
 	if(line == "" || pos >= line.length()){
-		if(input.eof()){
-			return EOF_T;
-		}
 		if(!getline(input, line)){
+			tokenFile << GetTokenName(EOF_T) << endl; 
 			return EOF_T;
 		}
 		listingFile << linenum + 1 << ": " << line << endl; 
@@ -92,84 +86,40 @@ token_type LexicalAnalyzer::GetToken ()
 		linenum++;
 
 	}	
-	//else we are still processing the last read in line
-	//we are finding a new lexeme
 	lexeme = "";
-	//debugFile << line << endl;
 
-
-/*	
-	   if(line[pos] == ' '){
-	   while(line[pos] == ' '){
-	   pos +=1;
-	   }
-	   }
-*/	   
-
-	//TODO- INCOMPLETE//
-	//find the next token
 	int stattablee = 0;
 	int prevState = 0;
 	int col = 0;
 	int state;
 	while(pos < line.length()){
-		//put line[pos] into a dfa table search and increment pos as appropriate
-		//if we find a valid token then break loop, write to tokenfile and return (see below), 
 
 		state = 0;
 		lexeme = "";
-	/*	
-		while(getCol(line[pos]) == 31 && pos < line.length()){
-			pos++; // skip whitespace. 
-		}	
-*/
-		//while(state != ERR || state != BU || state != GD){
+		
 		while(state < 100){	
 			col = getCol(line[pos]);
 	
-			/*
-			if(col == 31 && state != 11){
-				pos++;
-				state == GD;
-				break; 
-			}
-			*/
-
-			//cout << "col: " << col << endl;
-			//if(col != ERR || col != BU || col != GD) {
-			/*
-			if(col == 31 && state != 11){
-				pos++;	
-			}
-			*/
-
 			if(col < 100){	
 				prevState = state;
 				state = table[state][col];
-				//cout << "states assigned in col < 100 call" << endl;
-				//cout <<"col: " << col << endl;
 			}
 
 			else{
 				prevState = state;
 				state = col;
-				//cout << "states assigned in else call" << endl;
 			}
 
 			if(state != BU){
 				
 				if(state == 11 && col == 31){
 					lexeme += line[pos];
-					//not adding space!
 				}
 				else if(col != 31){
 				       lexeme += line[pos];
 				}
 				
-				//lexeme += line[pos];
 			}
-			//cout << "prev state: " << prevState << endl;
-			//cout << "Current state: " << state << endl;	
 			pos++;
 
 		}
@@ -178,42 +128,32 @@ token_type LexicalAnalyzer::GetToken ()
 		//TODO: set proper width using iomanip
 
 		if(state == ERR){
-			//uhoh
 			errors++;
-			//tokenFile<< "this lexeme gave err state: " << lexeme << endl;
 			ReportError(lexeme);
 			return ERROR_T;
 		}
 
 		if(state == BU){
-			//prevState += 1;
-			//cout << "prevstate: " << prevState << endl;
 			pos--;
 			token = GetTokenType(prevState);
-			//tokenFile << "In state: " << state << " and pos: " << pos << endl;
 			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
 
 			return token;
 		}
 
 		else if(state == GD){
-			//prevState += 1;
-			//cout << "prevstate: " << prevState << endl;
-			//valid lexeme, leave pos
 			token = GetTokenType(prevState);
 			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
 			return token;
 		}
 		
-		// I think this is wrong, if we see a space there should not be a token, unless its in quotes!
 		else if(state == SPACE){
-			//pos++;
 			token = GetTokenType(prevState);
-			//tokenFile << "In state: " << state << " and pos: " << pos << endl;
 			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
 
 			return token;
 		}
+		
 		
 		}
 	}
@@ -240,16 +180,11 @@ token_type LexicalAnalyzer::GetToken ()
 	}
 
 	token_type LexicalAnalyzer::GetTokenType(int acceptingState){
-		//check to see if we actually have a lexeme to check
-		//token = (token_type)enumIdentifierNumber();
-		//if(token == -1){
-		//must be IDENT, NUMLIT, STRLIT, OR LISTOP, find which one based off the state number that returned a GD or BU
-		//cout << "Accpeting state: " << acceptingState << endl;
 		std::unordered_map<string, int>::const_iterator got = myTokenMap.find(lexeme);
 		if(got != myTokenMap.end()){
 			return (token_type)got->second;
 		}
-		else{//not found so check acceptingstates
+		else{//not found in my token map so check acceptingstates
 			if(acceptingState == 10){
 				return LISTOP_T;
 			}
@@ -263,11 +198,8 @@ token_type LexicalAnalyzer::GetToken ()
 				return NUMLIT_T;
 			}
 		}
-		//}
-		//token = (token_type)enumIdentifierNumber();
-		//else we found a token in our hash table. 
-		//return token;	
 	}
+
 	void LexicalAnalyzer::fillTokenMap(){
 		myTokenMap.insert({
 				{"cons", 4},
@@ -300,26 +232,5 @@ token_type LexicalAnalyzer::GetToken ()
 				{")",31},
 				{"'",32}
 		});
-		/*
-		*/
-
 	}
-	//Given a lexeme in string format, will return the number associated with the enumerated token_type.
-	//does this by using an unordered hash map. 
-	int LexicalAnalyzer::enumIdentifierNumber(){
-		//cout << "this is lexeme: " << lexeme << endl;
-		std::unordered_map<string, int>::const_iterator got = myTokenMap.find(lexeme);
-		if(got != myTokenMap.end()){
-			return got->second;
-		}
-		else{//not found so check acceptingstates
-
-
-		}
-		//TODO: this is wrong, always returns an IDENT_T token. 
-
-
-
-
-		//else return 0;
-	}
+	
