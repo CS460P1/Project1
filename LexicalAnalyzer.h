@@ -1,3 +1,10 @@
+/*
+  File: LexicalAnalyzer.h
+  Authors: Brandon Williams, John Salman, Nick Ivanoff
+  Class: CS460 Fall 2018
+  Description: Header file containing defintions for LexicalAnalyzer class methods and variables. Implementations
+               can be found in LexicalAnalyzer.cpp.
+ */
 #ifndef LEX_H
 #define LEX_H
 
@@ -7,6 +14,10 @@
 
 using namespace std;
 
+/*
+  Object: token_type
+  Description: the enumerated types allows for 
+*/
 enum token_type {
 	NONE = -1, 
 
@@ -73,6 +84,7 @@ class LexicalAnalyzer
 		token_type GetTokenType(int acceptingState);
 		//int enumIdentifierNumber();
 		void fillTokenMap();
+		int getErrors();
 	private:
 		ifstream input;
 		ofstream listingFile;
