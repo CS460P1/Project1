@@ -1,3 +1,5 @@
+p1: all exec run
+
 P1.out : Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o 
 	g++ -g -o P1.out Project1.o SetLimits.o LexicalAnalyzer.o SyntacticalAnalyzer.o 
 
@@ -23,7 +25,6 @@ exec: P1.out
 run: 
 	./P1.out P1-0.ss
 
-p1: all exec run
 
 submit : Project1.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp makefile README.txt
 	rm -rf yourlastnameP1

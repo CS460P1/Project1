@@ -71,7 +71,7 @@ class LexicalAnalyzer
 		string GetLexeme () const;
 		void ReportError (const string & msg);
 		token_type GetTokenType(int acceptingState);
-		int enumIdentifierNumber();
+		//int enumIdentifierNumber();
 		void fillTokenMap();
 	private:
 		ifstream input;
@@ -84,7 +84,8 @@ class LexicalAnalyzer
 		int pos;
 		string lexeme;
 		int errors;
-		std::unordered_map<string, int> myTokenMap;
+		//hash table to check a lexeme and return its token if it exists, see GetTokenType function
+		std::unordered_map<string, int> myTokenMap; 
 };
 
 #endif
