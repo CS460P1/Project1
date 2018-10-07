@@ -27,14 +27,14 @@ run:
 
 
 submit : Project1.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp makefile README.txt
-	rm -rf yourlastnameP1
-	mkdir yourlastnameP1
-	cp Project1.cpp yourlastnameP1
-	cp LexicalAnalyzer.h yourlastnameP1
-	cp LexicalAnalyzer.cpp yourlastnameP1
-	cp SyntacticalAnalyzer.h yourlastnameP1
-	cp SyntacticalAnalyzer.cpp yourlastnameP1
-	cp makefile yourlastnameP1
-	cp README.txt yourlastnameP1
-	tar cfvz yourlastnameP1.tgz yourlastnameP1
-	cp yourlastnameP1.tgz ~tiawatts/cs460drop
+	rm -rf TeamdP1
+	mkdir TeamdP1
+	cp Project1.cpp TeamdP1
+	cp LexicalAnalyzer.h TeamdP1
+	cp LexicalAnalyzer.cpp TeamdP1
+	cp SyntacticalAnalyzer.h TeamdP1
+	cp SyntacticalAnalyzer.cpp TeamdP1
+	cp makefile TeamdP1
+	cp README.txt TeamdP1
+	tar cfvz yourlastnameP1.tgz TeamdP1
+	cp TeamdP1.tgz ~tiawatts/cs460drop

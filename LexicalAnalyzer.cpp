@@ -97,7 +97,7 @@ token_type LexicalAnalyzer::GetToken ()
 		state = 0;
 		lexeme = "";
 		
-		while(state < 100){	
+		while(state < 100 && pos < line.length()){	
 			col = getCol(line[pos]);
 	
 			if(col < 100){	
@@ -132,6 +132,13 @@ token_type LexicalAnalyzer::GetToken ()
 			ReportError(lexeme);
 			return ERROR_T;
 		}
+		
+		if(state == ERR2){
+			errors++;
+			pos--;
+			ReportError(lexeme);
+			return ERROR_T;
+		}
 
 		if(state == BU){
 			pos--;
@@ -156,6 +163,21 @@ token_type LexicalAnalyzer::GetToken ()
 		
 		
 		}
+		//end of line
+		token = GetTokenType(prevState);
+		if(token == ERROR_T){
+			errors++;
+			ReportError(lexeme);
+			return token;
+
+		}
+		else{
+			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
+			return token;
+		}	
+
+
+		return token;
 	}
 
 	string LexicalAnalyzer::GetTokenName (token_type t) const
@@ -175,31 +197,54 @@ token_type LexicalAnalyzer::GetToken ()
 	void LexicalAnalyzer::ReportError (const string & msg)
 	{
 		// This function will be called to write an error message to a file
-		listingFile << "Error at " << linenum << "," << pos << " invalid character found: " << line[pos-1] << endl;
+		if(lexeme[0] == '"'){
+			listingFile << "Error at " << linenum << "," << pos << " no closing quote on string " << lexeme << endl;
+
+		}
+		
+		else listingFile << "Error at " << linenum << "," << pos << " invalid character found: " << line[pos-1] << endl;
 
 	}
 
+	/*
+	Function: GetTokenType
+	Parameters: an accepting state that is given by GetToken
+	Return: Token
+	Description: This function is designed to return the token associated with a particular lexeme or accepting state.
+		     It first searches through a hash map of predefined lexemes and their corresponding token, if it is not
+		     found then it will return the token based on accepting state. 
+	*/
 	token_type LexicalAnalyzer::GetTokenType(int acceptingState){
+		//not found in my token map so check acceptingstates
+		if(acceptingState == 10){
+			return LISTOP_T;
+		}
+		else if(acceptingState == 11){
+			if(lexeme[lexeme.length()-1] != '"'){
+				return ERROR_T;
+			}
+			else return STRLIT_T;
+		}
+		else if(acceptingState == 1){
+			return IDENT_T;
+		}
+		else if(acceptingState ==2 || acceptingState == 4 || acceptingState ==3){
+			return NUMLIT_T;
+		}
+		//at this point we will check the hashmap for the lexeme we have. if found return the corresponding
+		//token
 		std::unordered_map<string, int>::const_iterator got = myTokenMap.find(lexeme);
 		if(got != myTokenMap.end()){
 			return (token_type)got->second;
 		}
-		else{//not found in my token map so check acceptingstates
-			if(acceptingState == 10){
-				return LISTOP_T;
-			}
-			else if(acceptingState == 11){
-				return STRLIT_T;
-			}
-			else if(acceptingState == 1){
-				return IDENT_T;
-			}
-			else if(acceptingState ==2 || acceptingState == 4 || acceptingState ==3){
-				return NUMLIT_T;
-			}
-		}
 	}
 
+	/*
+	Function: fillTokenMap
+	Parameters: none 
+	Return: none
+	Description: this function will fill a hash map with predefined lexemes and their corresponding tokens. 
+	*/
 	void LexicalAnalyzer::fillTokenMap(){
 		myTokenMap.insert({
 				{"cons", 4},
@@ -232,5 +277,9 @@ token_type LexicalAnalyzer::GetToken ()
 				{")",31},
 				{"'",32}
 		});
+	}
+	
+	void LexicalAnalyzer::WriteErrors(){
+		listingFile << errors << " errors found in input file" << endl;
 	}
 	
