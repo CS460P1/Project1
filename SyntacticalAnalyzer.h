@@ -1,3 +1,10 @@
+/*
+  File: SyntacticalAnalyzer.h
+  Authors: John Salman, Brandon Williams, Nick Ivanoff
+  Class: CS460 Fall 2018
+  Description: Definition of the SyntacticalAnalyzer class.
+*/
+
 #ifndef SYN_H
 #define SYN_H
 

@@ -1,11 +1,11 @@
 /*
-File: LexicalAnalyzer.cpp
-Authors: Brandon Williams, John Salman, Nick Ivanoff
-Class: CS460 Fall 2018
-Description: This is the implementation of the LexicalAnalyzer class, this class is designed
-to tokenize scheme code from a source file and output files containing the lines
-of input and errors within those lines, debugging information, and the lexemes with
-their interpreted token type.
+  File: LexicalAnalyzer.cpp
+  Authors: Brandon Williams, John Salman, Nick Ivanoff
+  Class: CS460 Fall 2018
+  Description: This is the implementation of the LexicalAnalyzer class, this class is designed
+               to tokenize scheme code from a source file and output files containing the lines
+	       of input and errors within those lines, debugging information, and the lexemes with
+	       their interpreted token type.
 */
 
 #include <iomanip>
@@ -17,8 +17,8 @@ their interpreted token type.
 using namespace std;
 
 /*
-Object: token_names[]
-Description: This is an array that can be indexed to return the name of a token type.
+  Object: token_names[]
+  Description: This is an array that can be indexed to return the name of a token type.
 */
 static string token_names[] = {	
 	"IDENT_T",
@@ -58,7 +58,12 @@ static string token_names[] = {
 	"EOF_T"};
 
 /*
-Function: 
+  Function: LexicalAnalyzer()
+  Parameters: c-style string representing the name of a file.
+  Return: NA
+  Description: Constructor for LexicalAnalyzer class, instantiates the private variables, writes the file name
+               to the listing file, and populates the hash table used to identify keywords, predicates, and 
+	       arithmetic keywords.
 */
 LexicalAnalyzer::LexicalAnalyzer (char * filename)
 {
@@ -79,6 +84,12 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 
 }
 
+/*
+  Function: ~LexicalAnalyzer()
+  Parameters: none
+  Return: NA
+  Description: Default destructor for LexicalAnalyzer class, primarily exists to close the input/output stream.
+ */
 LexicalAnalyzer::~LexicalAnalyzer ()
 {
 	// This function will complete the execution of the lexical analyzer class
@@ -88,11 +99,17 @@ LexicalAnalyzer::~LexicalAnalyzer ()
 	debugFile.close();
 }
 
+
+/*
+  Function: GetToken()
+  Parameters: none
+  Return: token_type associated with a lexeme
+  Description: The function utilizes a DFA to tokenize the next lexeme in the source file, identify the type of the token
+               and return said type. In also writes to the listing and token file with the lexemes and their corresponding
+	       types.
+*/
 token_type LexicalAnalyzer::GetToken ()
 {
-	// This function will find the next lexeme in the input file and return
-	// the token_type value associated with that lexeme
-
 	if(line == "" || pos >= line.length()){
 		if(!getline(input, line)){
 			tokenFile << GetTokenName(EOF_T) << endl; 
@@ -103,8 +120,8 @@ token_type LexicalAnalyzer::GetToken ()
 		linenum++;
 
 	}
-	lexeme = "";
 
+	lexeme = "";
 	int prevState = 0;
 	int col = 0;
 	int state = 0;
@@ -205,13 +222,24 @@ token_type LexicalAnalyzer::GetToken ()
 
 }
 
+/*
+  Function: GetTokenName()
+  Parameters: the type of a token
+  Return: A string that identifies the name of a type of token
+  Description: The GetTokenName function returns a string containing the name of the                                                                                                                                                 token passed to it.  
+ */
 string LexicalAnalyzer::GetTokenName (token_type t) const
 {
-	// The GetTokenName function returns a string containing the name of the
-	// token passed to it. 
 	return token_names[t];
 }
 
+/*
+  Function: GetLexeme()
+  Parameters: none
+  Return: the value in the private variable "lexeme"
+  Description: A getter function to access the private variable "lexeme" stored within the 
+               LexicalAnalyzer.
+ */
 string LexicalAnalyzer::GetLexeme () const
 {
 	// This function will return the lexeme found by the most recent call to 
@@ -219,10 +247,15 @@ string LexicalAnalyzer::GetLexeme () const
 	return lexeme;
 }
 
+/*
+  Function: ReportError()
+  Parameters: a reference to a string constant
+  Return: void
+  Description: This function will be called to write an error message to a file       
+ */
 void LexicalAnalyzer::ReportError (const string & msg)
 {
-	// This function will be called to write an error message to a file
-	if(lexeme[0] == '"'){
+        if(lexeme[0] == '"'){ // if there is no end to the string literal
 		listingFile << "Error at " << linenum << "," << pos << " no closing quote on string " << lexeme << endl;
 
 	}
@@ -232,12 +265,12 @@ void LexicalAnalyzer::ReportError (const string & msg)
 }
 
 /*
-Function: GetTokenType
-Parameters: an accepting state that is given by GetToken
-Return: Token
-Description: This function is designed to return the token associated with a particular lexeme or accepting state.
-It first searches through a hash map of predefined lexemes and their corresponding token, if it is not
-found then it will return the token based on accepting state. 
+  Function: GetTokenType
+  Parameters: an accepting state that is given by GetToken
+  Return: Token
+  Description: This function is designed to return the token associated with a particular lexeme or accepting state.
+  It first searches through a hash map of predefined lexemes and their corresponding token, if it is not
+  found then it will return the token based on accepting state. 
 */
 token_type LexicalAnalyzer::GetTokenType(int acceptingState){
 	//at this point we will check the hashmap for the lexeme we have. if found return the corresponding
@@ -267,10 +300,10 @@ token_type LexicalAnalyzer::GetTokenType(int acceptingState){
 }
 
 /*
-Function: fillTokenMap
-Parameters: none 
-Return: none
-Description: this function will fill a hash map with predefined lexemes and their corresponding tokens. 
+  Function: fillTokenMap
+  Parameters: none 
+  Return: void
+  Description: this function will fill a hash map with predefined lexemes and their corresponding tokens. 
 */
 void LexicalAnalyzer::fillTokenMap(){
 	myTokenMap.insert({
@@ -306,7 +339,14 @@ void LexicalAnalyzer::fillTokenMap(){
 	});
 }
 
+/*
+  Function: WriteErrors()
+  Parameters: none
+  Return: void
+  Description: This function writes the number of errors found in the source file to the listing file.
+ */
 void LexicalAnalyzer::WriteErrors(){
+  // NOTE: this function is called within SyntacticalAnalyzer.cpp after an EOF token is encountered.
 	listingFile << errors << " errors found in input file" << endl;
 }
 

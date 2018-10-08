@@ -28,7 +28,7 @@ run:
 	./P1.out P1-0.ss
 
 
-submit : Project1.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp makefile README.txt
+submit : Project1.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp transition.hpp makefile README.txt
 	rm -rf TeamdP1
 	mkdir TeamdP1
 	cp Project1.cpp TeamdP1
@@ -36,7 +36,8 @@ submit : Project1.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.
 	cp LexicalAnalyzer.cpp TeamdP1
 	cp SyntacticalAnalyzer.h TeamdP1
 	cp SyntacticalAnalyzer.cpp TeamdP1
+	cp transition.hpp TeamdP1
 	cp makefile TeamdP1
 	cp README.txt TeamdP1
-	tar cfvz yourlastnameP1.tgz TeamdP1
+	tar cfvz TeamdP1.tgz TeamdP1
 	cp TeamdP1.tgz ~tiawatts/cs460drop

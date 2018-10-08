@@ -1,3 +1,11 @@
+/*
+  File: Project1.cpp
+  Authors: Brandon Williams, John Salman, Nick Ivanoff
+  Class: CS460 Fall 2018
+  Description: This is the main file for project 1, it creates a SyntacticalAnalyzer object which in turn creates
+               a LexicalAnalyzer object which interprets a file passed from the command line at run time.
+*/
+
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
