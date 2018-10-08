@@ -101,8 +101,8 @@ int table [16][32] {
   // States 10-15
   {1,BU,BU,1,1,1,1,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,SPACE}, // path to LISTOP_T on 'car' + 'cd^+r' + 'cad^+r' input
   {11,11,11,11,11,11,11,11,GD,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11}, // path to STRLIT_T on '"' + '"(char^*)' input 
-  {BU,2,2,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,SPACE}, // path to PLUS_T or NUMLIT_T on '+' input
-  {BU,2,2,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,SPACE}, // path to MINUS_T or NUMLIT_T on '-' input
+  {BU,2,5,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,SPACE}, // path to PLUS_T or NUMLIT_T on '+' input
+  {BU,2,5,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,SPACE}, // path to MINUS_T or NUMLIT_T on '-' input
   {BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,GD,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,SPACE}, // path to GT_T or GTE_T on '>' input
   {BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,GD,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,BU,SPACE} // path to LT_T or LTE_T on '<' input
 };
