@@ -69,9 +69,9 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 {
 	// This function will initialize the lexical analyzer class
 	input.open(filename);
-	listingFile.open("P1-0.lst");
-	tokenFile.open("P1-0.p1");
-	debugFile.open("P1-0.dbg");
+	listingFile.open("P1-1.lst");
+	tokenFile.open("P1-1.p1");
+	debugFile.open("P1-1.dbg");
 
 	line = "";
 	linenum = 0; 
@@ -169,8 +169,9 @@ token_type LexicalAnalyzer::GetToken ()
 
 		if(state == ERR){
 			errors++;
+			token = ERROR_T;
 			ReportError(lexeme);
-			return ERROR_T;
+			return token;
 		}
 		
 		//an error with a backup
@@ -184,7 +185,17 @@ token_type LexicalAnalyzer::GetToken ()
 		if(state == BU){
 			pos--;
 			token = GetTokenType(prevState);
-			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
+			string token_name = GetTokenName(token);
+			cout << "Testing: " << token_name << lexeme  << endl;
+			if(token_name == "IDENT_T" && lexeme[lexeme.length() - 1] == '?'){
+			  cout << lexeme << endl;
+			  lexeme.pop_back();
+			  cout << lexeme << endl;
+			  token = GetTokenType(prevState);
+			  token_name = GetTokenName(token);
+			  pos--;
+			}
+			tokenFile << token_name << "   " << lexeme << endl;
 
 			return token;
 		}
@@ -198,17 +209,27 @@ token_type LexicalAnalyzer::GetToken ()
 		//means we reached the end of a lexeme, and we want to get the token type from the previous state that got
 		//us to the SPACE state. 
 		else if(state == SPACE){
-			token = GetTokenType(prevState);
-			tokenFile << GetTokenName(token) << "   " << lexeme << endl;
-
-			return token;
+		  
+		  token = GetTokenType(prevState);
+		  string token_name = GetTokenName(token);
+		  cout << "Testing: " << token_name << lexeme  << endl;
+		  if(token_name == "IDENT_T" && lexeme[lexeme.length() - 1] == '?'){
+		    cout << lexeme << endl;
+		    lexeme.pop_back();
+		    cout << lexeme << endl;
+		    token = GetTokenType(prevState);
+		    token_name = GetTokenName(token);
+		    pos--;
+		  }
+		  tokenFile << token_name << "   " << lexeme << endl;
+		  return token;
 		}
 
 
 	}
 	//at this point we have reached the end of the line but have not reached an ERR, ERR2, BU, GD, or SPACE state. 
 	//though we might still have a valid lexeme that needs its token found and written to the token file. 
-	token = GetTokenType(prevState);
+	token = GetTokenType(state); // CHANGED TO STATE FROM PREVSTATE
 	if(token == ERROR_T){
 		errors++;
 		ReportError(lexeme);
@@ -257,11 +278,13 @@ void LexicalAnalyzer::ReportError (const string & msg)
 {
         if(lexeme[0] == '"'){ // if there is no end to the string literal
 		listingFile << "Error at " << linenum << "," << pos << " no closing quote on string " << lexeme << endl;
-
+		tokenFile << GetTokenName(token) << "   " << lexeme << endl; 
 	}
-
-	else listingFile << "Error at " << linenum << "," << pos << " invalid character found: " << line[pos-1] << endl;
-
+	
+	else{
+	  listingFile << "Error at " << linenum << "," << pos << " invalid character found: " << line[pos-1] << endl;
+	  tokenFile << GetTokenName(token) << "   " << lexeme << endl;
+	}
 }
 
 /*
