@@ -186,17 +186,13 @@ token_type LexicalAnalyzer::GetToken ()
 			pos--;
 			token = GetTokenType(prevState);
 			string token_name = GetTokenName(token);
-			cout << "Testing: " << token_name << lexeme  << endl;
 			if(token_name == "IDENT_T" && lexeme[lexeme.length() - 1] == '?'){
-			  cout << lexeme << endl;
 			  lexeme.pop_back();
-			  cout << lexeme << endl;
 			  token = GetTokenType(prevState);
 			  token_name = GetTokenName(token);
 			  pos--;
 			}
 			tokenFile << token_name << "   " << lexeme << endl;
-
 			return token;
 		}
 
@@ -212,14 +208,12 @@ token_type LexicalAnalyzer::GetToken ()
 		  
 		  token = GetTokenType(prevState);
 		  string token_name = GetTokenName(token);
-		  cout << "Testing: " << token_name << lexeme  << endl;
+		  //cout << "Testing: " << token_name << lexeme  << endl;
 		  if(token_name == "IDENT_T" && lexeme[lexeme.length() - 1] == '?'){
-		    cout << lexeme << endl;
 		    lexeme.pop_back();
-		    cout << lexeme << endl;
 		    token = GetTokenType(prevState);
 		    token_name = GetTokenName(token);
-		    pos--;
+		    pos-=2;
 		  }
 		  tokenFile << token_name << "   " << lexeme << endl;
 		  return token;
