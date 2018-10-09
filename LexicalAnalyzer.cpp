@@ -178,6 +178,8 @@ token_type LexicalAnalyzer::GetToken ()
 		if(state == ERR2){
 			errors++;
 			pos--;
+			token = ERROR_T;
+			lexeme.pop_back();
 			ReportError(lexeme);
 			return ERROR_T;
 		}
@@ -282,16 +284,17 @@ string LexicalAnalyzer::GetLexeme () const
 void LexicalAnalyzer::ReportError (const string & msg)
 {
         if(lexeme[0] == '"'){ // if there is no end to the string literal
-		listingFile << "Error at " << linenum << "," << pos << " no closing quote on string " << lexeme << endl;
-		tokenFile << GetTokenName(token) << "   " << lexeme << endl; 
+		listingFile << "Error at " << linenum << "," << pos << " no closing quote on string " << msg << endl;
+		tokenFile << GetTokenName(token) << "   " << msg << endl; 
 		errors++;
 		pos--;
 		ReportError(lexeme);
 	}
 	
 	else{
-	  listingFile << "Error at " << linenum << "," << pos << " invalid character found: " << line[pos-1] << endl;
-	  tokenFile << GetTokenName(token) << "   " << lexeme << endl;
+	  //listingFile << "Error at " << linenum << "," << pos << " invalid character found: " << line[pos-1] << endl;
+	  listingFile << "Error at " << linenum << "," << pos << " invalid character found: " << msg << endl;
+	  tokenFile << GetTokenName(token) << "   " << msg << endl;
 	}
 }
 
